@@ -5,7 +5,7 @@
 Summary:	Happy Eyeballs for asyncio
 Name:		python3-%{module}
 Version:	2.4.6
-Release:	1
+Release:	2
 License:	PSF
 Group:		Libraries/Python
 Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
