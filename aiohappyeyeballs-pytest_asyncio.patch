@@ -1,0 +1,25 @@
+event_loop fixture no longer exists in pytest_asyncio 1.0.0
+--- aiohappyeyeballs-2.6.1/tests/conftest.py.orig	1970-01-01 01:00:00.000000000 +0100
++++ aiohappyeyeballs-2.6.1/tests/conftest.py	2025-07-12 16:32:28.421774801 +0200
+@@ -41,12 +41,11 @@ def long_repr_strings() -> Generator[Non
+ 
+ 
+ @pytest.fixture(autouse=True)
+-def verify_no_lingering_tasks(
+-    event_loop: asyncio.AbstractEventLoop,
+-) -> Generator[None, None, None]:
++def verify_no_lingering_tasks() -> Generator[None, None, None]:
+     """Verify that all tasks are cleaned up."""
++    event_loop = asyncio.new_event_loop()
+     tasks_before = asyncio.all_tasks(event_loop)
+-    yield
++    yield event_loop
+ 
+     tasks = asyncio.all_tasks(event_loop) - tasks_before
+     for task in tasks:
+@@ -60,3 +60,5 @@ def verify_no_lingering_tasks(
+             with long_repr_strings():
+                 pytest.fail(f"Lingering timer after test {handle!r}")
+                 handle.cancel()
++
++    event_loop.close()
