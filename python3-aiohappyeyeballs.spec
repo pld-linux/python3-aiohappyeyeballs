@@ -6,19 +6,18 @@
 Summary:	Happy Eyeballs for asyncio
 Summary(pl.UTF-8):	Algorytm Happy Eyeballs dla asyncio
 Name:		python3-%{module}
-Version:	2.6.1
+Version:	2.7.1
 Release:	1
 License:	PSF
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/aiohappyeyeballs/
 Source0:	https://files.pythonhosted.org/packages/source/a/aiohappyeyeballs/%{module}-%{version}.tar.gz
-# Source0-md5:	2fa845a1ce2f7730045fa763aa9987f8
-Patch0:		aiohappyeyeballs-pytest_asyncio.patch
+# Source0-md5:	0f2e6f584d94d4d21d7d6911f584fb2c
 URL:		https://pypi.org/project/aiohappyeyeballs/
 BuildRequires:	python3-build
 BuildRequires:	python3-installer
-BuildRequires:	python3-modules >= 1:3.9
-BuildRequires:	python3-poetry-core
+BuildRequires:	python3-modules >= 1:3.10
+BuildRequires:	python3-poetry-core >= 2.0.0
 %if %{with tests}
 BuildRequires:	python3-pytest >= 7
 BuildRequires:	python3-pytest-cov >= 3
@@ -26,7 +25,7 @@ BuildRequires:	python3-pytest-asyncio >= 0.23.2
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 2.044
-Requires:	python3-modules >= 1:3.9
+Requires:	python3-modules >= 1:3.10
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -40,13 +39,12 @@ Ta biblioteka pozwala na łączenie z użyciem algorythmu Happy Eyeballs
 
 %prep
 %setup -q -n %{module}-%{version}
-%patch -P0 -p1
 
 %build
 %py3_build_pyproject
 
 %if %{with tests}
-%{__python} -m zipfile -e build-3/*.whl build-3-test
+%{__python3} -m zipfile -e build-3/*.whl build-3-test
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 PYTEST_PLUGINS=pytest_cov.plugin,pytest_asyncio.plugin \
 %{__python3} -m pytest -o pythonpath="$PWD/build-3-test" tests
