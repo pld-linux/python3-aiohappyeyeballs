@@ -7,7 +7,7 @@ Summary:	Happy Eyeballs for asyncio
 Summary(pl.UTF-8):	Algorytm Happy Eyeballs dla asyncio
 Name:		python3-%{module}
 Version:	2.7.1
-Release:	1
+Release:	2
 License:	PSF
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/aiohappyeyeballs/
@@ -45,9 +45,11 @@ Ta biblioteka pozwala na łączenie z użyciem algorythmu Happy Eyeballs
 
 %if %{with tests}
 %{__python3} -m zipfile -e build-3/*.whl build-3-test
+# tests/benchmarks are CodSpeed-only: they need the pytest-codspeed plugin loaded
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 PYTEST_PLUGINS=pytest_cov.plugin,pytest_asyncio.plugin \
-%{__python3} -m pytest -o pythonpath="$PWD/build-3-test" tests
+%{__python3} -m pytest -o pythonpath="$PWD/build-3-test" tests \
+	--ignore=tests/benchmarks
 %endif
 
 %install
